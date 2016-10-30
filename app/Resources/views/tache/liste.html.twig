@@ -1,4 +1,4 @@
-{# src/AppBundle/Resources/views/Advert/index.html.twig #}
+{# src/AppBundle/Resources/views/tache/index.html.twig #}
 
 {% extends "base.html.twig" %}
 
@@ -6,17 +6,21 @@
 <table class="table table-striped">
         <thead>
             <tr>
-                <th><i class="fa fa-cogs"></i> Activité</th>
+                <th><i class="fa fa-cogs"></i> Jour</th>
+                <th><i class="fa fa-cogs"></i> Durée</th>
+                <th><i class="fa fa-cogs"></i> Description</th>
                 <th><i class="fa fa-cogs"></i> Actions</th>
             </tr>
         </thead>
         <tbody>
-        {% for activite in listeActivites %}
+        {% for tache in listeTaches %}
             <tr>
-                <td>{{ activite.nom }}</td>
+                <td>{{ tache.jour }}</td>
+                <td>{{ tache.duree }}</td>
+                <td>{{ tache.description }}</td>
                 <td>
                     <div class="item-actions">
-                            <a href="{{ path('modifier_activite', { id: activite.id }) }}" class="btn btn-sm btn-primary">
+                            <a href="{{ path('modifier_tache', { id: tache.id }) }}" class="btn btn-sm btn-primary">
                                 <i class="fa fa-edit"></i> Modifier
                             </a>
                     </div>
@@ -24,7 +28,7 @@
             </tr>
         {% else %}
             <tr>
-                <td colspan="4" align="center">Pas de tâche enregitrée</td>
+                <td colspan="4" align="center">Aucune Tache n'est trouvée</td>
            </tr>
         {% endfor %}
         </tbody>

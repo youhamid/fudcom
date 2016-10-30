@@ -10,4 +10,6 @@ php bin/console doctrine:schema:update --force
 instllation composer .exe pour Windows téléchargeable
 composer require --dev doctrine/doctrine-fixtures-bundle
 php bin/console doctrine:fixtures:load
+php bin/console cache:clear
+php bin/console cache:clear --env=prod
 heroku config:set SYMFONY_ENV=prod
