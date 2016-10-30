@@ -1,0 +1,32 @@
+{# src/AppBundle/Resources/views/Advert/index.html.twig #}
+
+{% extends "base.html.twig" %}
+
+{% block main %}
+<table class="table table-striped">
+        <thead>
+            <tr>
+                <th><i class="fa fa-cogs"></i> Activité</th>
+                <th><i class="fa fa-cogs"></i> Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for activite in listeActivites %}
+            <tr>
+                <td>{{ activite.nom }}</td>
+                <td>
+                    <div class="item-actions">
+                            <a href="{{ path('modifier_activite', { id: activite.id }) }}" class="btn btn-sm btn-primary">
+                                <i class="fa fa-edit"></i> Modifier
+                            </a>
+                    </div>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4" align="center">Pas de tâche enregitrée</td>
+           </tr>
+        {% endfor %}
+        </tbody>
+</table>
+{% endblock %}

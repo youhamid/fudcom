@@ -1,0 +1,23 @@
+{% extends "base.html.twig" %}
+
+
+{% block main %}
+    <h1>Suppression d'une activité</h1>
+
+    {{ include('activite/_form.html.twig', {
+        form: edit_form,
+        button_label: 'Enregistrer',
+        include_back_to_home_link: false,
+        button_css: 'btn btn-lg btn-block btn-primary'
+    }, with_context = false) }}
+
+    <div class="section actions">
+        {{ include('activite/_form.html.twig', {
+            form: delete_form,
+            button_label: 'Supprimer',
+            button_css: 'btn btn-lg btn-block btn-danger',
+            show_confirmation: true,
+        }, with_context = false) }}
+    </div>
+
+{% endblock %}

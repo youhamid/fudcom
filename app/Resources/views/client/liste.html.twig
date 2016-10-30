@@ -1,0 +1,32 @@
+{# src/AppBundle/Resources/views/client/index.html.twig #}
+
+{% extends "base.html.twig" %}
+
+{% block main %}
+<table class="table table-striped">
+        <thead>
+            <tr>
+                <th><i class="fa fa-cogs"></i> Client</th>
+                <th><i class="fa fa-cogs"></i> Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for client in listeClients %}
+            <tr>
+                <td>{{ client.nom }}</td>
+                <td>
+                    <div class="item-actions">
+                            <a href="{{ path('modifier_client', { id: client.id }) }}" class="btn btn-sm btn-primary">
+                                <i class="fa fa-edit"></i> Modifier
+                            </a>
+                    </div>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4" align="center">Aucun client n'est trouvé</td>
+           </tr>
+        {% endfor %}
+        </tbody>
+</table>
+{% endblock %}
