@@ -63,3 +63,4 @@ class Activite
         return $this->nom;
     }
 }
+

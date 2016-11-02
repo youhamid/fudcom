@@ -63,4 +63,3 @@ class Client
         return $this->nom;
     }
 }
-

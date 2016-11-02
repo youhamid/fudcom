@@ -145,52 +145,5 @@ class Tache
     {
         $this->jour = new \DateTime();
     }
-
-    /**
-     * Set activite
-     *
-     * @param \AppBundle\Entity\Activite $activite
-     *
-     * @return Tache
-     */
-    public function setActivite(\AppBundle\Entity\Activite $activite = null)
-    {
-        $this->activite = $activite;
-
-        return $this;
-    }
-
-    /**
-     * Get activite
-     *
-     * @return \AppBundle\Entity\Activite
-     */
-    public function getActivite()
-    {
-        return $this->activite;
-    }
-
-    /**
-     * Set client
-     *
-     * @param \AppBundle\Entity\Client $client
-     *
-     * @return Tache
-     */
-    public function setClient(\AppBundle\Entity\Client $client = null)
-    {
-        $this->client = $client;
-
-        return $this;
-    }
-
-    /**
-     * Get client
-     *
-     * @return \AppBundle\Entity\Client
-     */
-    public function getClient()
-    {
-        return $this->client;
-    }
 }
+

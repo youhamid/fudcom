@@ -10,4 +10,14 @@ namespace AppBundle\Repository;
  */
 class TacheRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function findAllJoined()
+    {
+       return $this->getEntityManager()
+            ->createQuery(
+                'SELECT t, c, a FROM AppBundle:Tache t
+                JOIN t.client c
+                JOIN t.activite a'
+            )
+            ->getResult();
+    }
 }

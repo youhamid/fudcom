@@ -7,6 +7,8 @@
         <thead>
             <tr>
                 <th><i class="fa fa-cogs"></i> Jour</th>
+                <th><i class="fa fa-cogs"></i> Client</th>
+                <th><i class="fa fa-cogs"></i> Activite</th>
                 <th><i class="fa fa-cogs"></i> Durée</th>
                 <th><i class="fa fa-cogs"></i> Description</th>
                 <th><i class="fa fa-cogs"></i> Actions</th>
@@ -15,7 +17,9 @@
         <tbody>
         {% for tache in listeTaches %}
             <tr>
-                <td>{{ tache.jour }}</td>
+                <td>{{ tache.jour|date('d/m/Y') }}</td>
+                <td>{{ tache.client.nom }}</td>
+                <td>{{ tache.activite.nom }}</td>
                 <td>{{ tache.duree }}</td>
                 <td>{{ tache.description }}</td>
                 <td>

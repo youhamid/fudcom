@@ -8,9 +8,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use AppBundle\Entity\Tache;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class TacheController extends Controller
@@ -22,7 +23,7 @@ class TacheController extends Controller
     public function TachesAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-                $listeTaches = $em->getRepository('AppBundle:Tache')->findAll();
+                $listeTaches = $em->getRepository('AppBundle:Tache')->findAllJoined();
                 return $this->render('tache/liste.html.twig',array(
         'listeTaches' => $listeTaches
         ));
@@ -37,8 +38,17 @@ class TacheController extends Controller
         $tache = new Tache();
 
         $form = $this->createFormBuilder($tache)
-                ->add('jour', DateType::class)
-                ->add('duree', TextType::class)
+                ->add('jour', DateType::class, array(
+                'widget' => 'single_text',
+                'format' => 'yyyy-MM-dd'))
+                 ->add('client', EntityType::class, array(
+                    'class' => 'AppBundle:Client',
+                    'choice_label' => 'nom'))
+                ->add('activite', EntityType::class, array(
+                    'class' => 'AppBundle:Activite',
+                    'choice_label' => 'nom'))
+                ->add('duree', NumberType::class, array(
+                'invalid_message' => 'La duree doit être un chiffre'))
                 ->add('description', TextareaType::class)
                 ->add('save', SubmitType::class, array('label' => 'Enregitrer tache'))
                 ->getForm();
@@ -70,17 +80,26 @@ class TacheController extends Controller
      * @Route("/tache/{id}/edit", requirements={"id": "\d+"}, name="modifier_tache")
      */
     
-    public function ModifierTacheAction(Client $tache, Request $request)
+    public function ModifierTacheAction(Tache $tache, Request $request)
     {
     	$entityManager = $this->getDoctrine()->getManager();
         $editForm = $this->createFormBuilder($tache)
-            ->add('jour', DateType::class)
-            ->add('duree', TextType::class)
-            ->add('description', TextareaType::class)
+            ->add('jour', DateType::class, array(
+                'widget' => 'single_text',
+                'format' => 'yyyy-MM-dd'))
+                 ->add('client', EntityType::class, array(
+                    'class' => 'AppBundle:Client',
+                    'choice_label' => 'nom'))
+                ->add('activite', EntityType::class, array(
+                    'class' => 'AppBundle:Activite',
+                    'choice_label' => 'nom'))
+                ->add('duree', NumberType::class, array(
+                'invalid_message' => 'La duree doit être un chiffre'))
+                ->add('description', TextareaType::class)
             ->getForm();
 
         $deleteForm = $this->createFormBuilder()
-            ->setAction($this->generateUrl('supprimer_tache', ['id' => $client->getId()]))
+            ->setAction($this->generateUrl('supprimer_tache', ['id' => $tache->getId()]))
             ->setMethod('DELETE')
             ->getForm();
 
@@ -104,7 +123,7 @@ class TacheController extends Controller
      *
      * @Route("tache/{id}/supprimer", name="supprimer_tache")
      */
-    public function deleteTacheAction(Request $request, Client $tache)
+    public function deleteTacheAction(Request $request, Tache $tache)
     {
         $form = $this->createFormBuilder()
             ->setAction($this->generateUrl('supprimer_tache', ['id' => $tache->getId()]))
