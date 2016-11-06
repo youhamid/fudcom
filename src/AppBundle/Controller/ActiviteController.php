@@ -15,7 +15,7 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 class ActiviteController extends Controller
 {
     /**
-     * @Route("/activites", name="activites")
+     * @Route("/admin/activites", name="activites")
      */
     public function indexAction(Request $request)
     {
@@ -27,7 +27,7 @@ class ActiviteController extends Controller
     }
 
     /**
-     * @Route("/ajouter_activite", name="ajouter_activite")
+     * @Route("/admin/ajouter_activite", name="ajouter_activite")
      */
     
     public function addActiviteAction(Request $request)
@@ -63,7 +63,7 @@ class ActiviteController extends Controller
     /**
      * Modifier une activité.
      *
-     * @Route("/activite/{id}/edit", requirements={"id": "\d+"}, name="modifier_activite")
+     * @Route("/admin/activite/{id}/edit", requirements={"id": "\d+"}, name="modifier_activite")
      */
     
     public function ModifierActiviteAction(Activite $activite, Request $request)
@@ -98,7 +98,7 @@ class ActiviteController extends Controller
     /**
      * Suppression activité.
      *
-     * @Route("activite/{id}/supprimer", name="supprimer_activite")
+     * @Route("admin/activite/{id}/supprimer", name="supprimer_activite")
      */
     public function deleteActiviteAction(Request $request, Activite $activite)
     {

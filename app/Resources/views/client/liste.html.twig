@@ -3,6 +3,11 @@
 {% extends "base.html.twig" %}
 
 {% block main %}
+<div class="item-actions navbar-right">
+    <a href="{{ path('ajouter_client') }}" class="btn btn-sm btn-success">
+            <i class="fa fa-edit"></i> Ajouter un client
+    </a>
+</div>
 <table class="table table-striped">
         <thead>
             <tr>

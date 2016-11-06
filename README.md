@@ -14,3 +14,4 @@ php bin/console cache:clear
 php bin/console cache:clear --env=prod
 heroku config:set SYMFONY_ENV=prod
 php bin/console doctrine:generate:entities AppBundle
+php bin/console doctrine:generate:entities AppBundle/Entity/User

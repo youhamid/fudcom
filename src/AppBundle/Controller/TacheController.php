@@ -121,7 +121,7 @@ class TacheController extends Controller
     /**
      * Suppression tache.
      *
-     * @Route("tache/{id}/supprimer", name="supprimer_tache")
+     * @Route("/tache/{id}/supprimer", name="supprimer_tache")
      */
     public function deleteTacheAction(Request $request, Tache $tache)
     {

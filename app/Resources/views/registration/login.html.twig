@@ -1,0 +1,30 @@
+{# app/Resources/views/registration/login.html.twig #}
+
+{% extends "base.html.twig" %}
+
+{% block main %}
+{% if error %}
+        <div class="alert alert-danger">
+            {{ error.messageKey|trans(error.messageData, 'security') }}
+        </div>
+    {% endif %}
+<div class="well">
+    <form action="{{ path('login') }}" method="post">
+        <fieldset>
+            <legend><i class="fa fa-lock" aria-hidden="true"></i> Authentification </legend>
+            <div class="form-group">
+                <label for="username">Utilisateur</label>
+                <input type="text" id="username" name="_username" value="{{ last_username }}" class="form-control"/>
+            </div>
+            <div class="form-group">
+                <label for="password">Mot de passe</label>
+                <input type="password" id="password" name="_password" class="form-control" />
+            </div>
+            <button type="submit" class="btn btn-primary">
+                <i class="fa fa-sign-in" aria-hidden="true"></i> login 
+            </button>
+        </fieldset>
+    </form>
+</div>
+
+{% endblock %}

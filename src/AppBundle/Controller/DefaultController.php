@@ -20,10 +20,10 @@ class DefaultController extends Controller
     public function indexAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-                // La méthode findAll retourne les activites de la base de données
-                $listActivites = $em->getRepository('AppBundle:Activite')->findAll();
-                return $this->render('activite/liste.html.twig',array(
-        'listeActivites' => $listActivites
+                // La méthode findAll retourne les taches de la base de données
+                $listTaches = $em->getRepository('AppBundle:Tache')->findAll();
+                return $this->render('tache/liste.html.twig',array(
+        'listeTaches' => $listTaches
         ));
     }
 

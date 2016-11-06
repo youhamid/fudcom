@@ -37,7 +37,7 @@
                     <div class="container">
                         <div class="navbar-header">
                             <a class="navbar-brand" href="{{ path('homepage') }}">
-                                Acceuil
+                                 <i class="fa fa-home"></i> Acceuil
                             </a>
 
                             <button type="button" class="navbar-toggle"
@@ -54,43 +54,32 @@
 
                                 {% block header_navigation_links %}
                                     <li>
-                                        <a href="{{ path('homepage') }}">
-                                            <i class="fa fa-home"></i> Menu
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="{{ path('ajouter_activite') }}">
-                                            <i class="fa fa-home"></i> Ajouter Activité
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="{{ path('ajouter_tache') }}">
-                                            <i class="fa fa-home"></i> Ajouter Tache
-                                        </a>
-                                    </li>
-                                    <li>
                                         <a href="{{ path('taches') }}">
-                                            <i class="fa fa-home"></i> Taches saisies
+                                            <i class="fa fa-calendar"></i> Taches
+                                        </a>
+                                    </li>
+                                    {% if is_granted('ROLE_ADMIN') %}
+                                    <li>
+                                        <a href="{{ path('activites') }}">
+                                            <i class="fa fa-database"></i> Activités
                                         </a>
                                     </li>
                                     <li>
                                         <a href="{{ path('clients') }}">
-                                            <i class="fa fa-home"></i> Clients
+                                            <i class="fa fa-database"></i> Clients
                                         </a>
                                     </li>
-
-                                    {% if is_granted('ROLE_ADMIN') %}
-                                        <li>
-                                            <a href="{{ path('admin_post_index') }}">
-                                                <i class="fa fa-lock"></i> Admin
-                                            </a>
-                                        </li>
+                                    <li>
+                                        <a href="{{ path('users') }}">
+                                            <i class="fa fa-database"></i> Utilisateurs
+                                        </a>
+                                    </li>
                                     {% endif %}
                                 {% endblock %}
 
                                 {% if app.user %}
                                     <li>
-                                        <a href="{{ path('homepage') }}">
+                                        <a href="{{ path('security_logout') }}">
                                             <i class="fa fa-sign-out"></i> Deconnexion
                                         </a>
                                     </li>

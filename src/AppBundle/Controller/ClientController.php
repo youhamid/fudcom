@@ -16,7 +16,7 @@ class ClientController extends Controller
 {
 
     /**
-     * @Route("/clients", name="clients")
+     * @Route("/admin/clients", name="clients")
      */
     public function ClientsAction(Request $request)
     {
@@ -29,7 +29,7 @@ class ClientController extends Controller
     }
 
     /**
-     * @Route("/ajouter_client", name="ajouter_client")
+     * @Route("/admin/ajouter_client", name="ajouter_client")
      */
     
     public function addClientAction(Request $request)
@@ -66,7 +66,7 @@ class ClientController extends Controller
     /**
      * Modifier un client existant.
      *
-     * @Route("/client/{id}/edit", requirements={"id": "\d+"}, name="modifier_client")
+     * @Route("/admin/client/{id}/edit", requirements={"id": "\d+"}, name="modifier_client")
      */
     
     public function ModifierClientAction(Client $client, Request $request)
@@ -101,7 +101,7 @@ class ClientController extends Controller
     /**
      * Suppression client.
      *
-     * @Route("client/{id}/supprimer", name="supprimer_client")
+     * @Route("/admin/client/{id}/supprimer", name="supprimer_client")
      */
     public function deleteClientAction(Request $request, Client $client)
     {
