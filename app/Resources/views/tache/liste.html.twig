@@ -11,6 +11,7 @@
 <table class="table table-striped">
         <thead>
             <tr>
+                <th><i class="fa fa-cogs"></i> Utilisateur</th>
                 <th><i class="fa fa-cogs"></i> Jour</th>
                 <th><i class="fa fa-cogs"></i> Client</th>
                 <th><i class="fa fa-cogs"></i> Activite</th>
@@ -22,6 +23,7 @@
         <tbody>
         {% for tache in listeTaches %}
             <tr>
+                <td>{{ tache.user.username }}</td>
                 <td>{{ tache.jour|date('d/m/Y') }}</td>
                 <td>{{ tache.client.nom }}</td>
                 <td>{{ tache.activite.nom }}</td>

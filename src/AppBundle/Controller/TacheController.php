@@ -23,7 +23,11 @@ class TacheController extends Controller
     public function TachesAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-                $listeTaches = $em->getRepository('AppBundle:Tache')->findAllJoined();
+               if ($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
+                    $listeTaches = $em->getRepository('AppBundle:Tache')->findAll();
+                } else {
+                    $listeTaches = $em->getRepository('AppBundle:Tache')->findByUser($this->getUser());
+                }
                 return $this->render('tache/liste.html.twig',array(
         'listeTaches' => $listeTaches
         ));
@@ -36,11 +40,14 @@ class TacheController extends Controller
     public function addTacheAction(Request $request)
     {
         $tache = new Tache();
+        $user = $this->getUser();
+        $username = $user->getUsername();
+        $tache->setUser($user);
 
         $form = $this->createFormBuilder($tache)
                 ->add('jour', DateType::class, array(
                 'widget' => 'single_text',
-                'format' => 'yyyy-MM-dd'))
+                'format' => 'd/M/y'))
                  ->add('client', EntityType::class, array(
                     'class' => 'AppBundle:Client',
                     'choice_label' => 'nom'))
@@ -48,8 +55,16 @@ class TacheController extends Controller
                     'class' => 'AppBundle:Activite',
                     'choice_label' => 'nom'))
                 ->add('duree', NumberType::class, array(
-                'invalid_message' => 'La duree doit être un chiffre'))
+                    'invalid_message' => 'La duree doit être un chiffre'))
                 ->add('description', TextareaType::class)
+                ->add('user', EntityType::class, array(
+                'class' => 'AppBundle:User',
+                'choice_label' => 'username',
+                'disabled' => 'true'))
+                ->add('dateCreation', DateType::class, array(
+                    'widget' => 'single_text',
+                    'format' => 'd/M/y h:m:s',
+                    'disabled' => 'true'))
                 ->add('save', SubmitType::class, array('label' => 'Enregitrer tache'))
                 ->getForm();
 
@@ -86,16 +101,24 @@ class TacheController extends Controller
         $editForm = $this->createFormBuilder($tache)
             ->add('jour', DateType::class, array(
                 'widget' => 'single_text',
-                'format' => 'yyyy-MM-dd'))
-                 ->add('client', EntityType::class, array(
-                    'class' => 'AppBundle:Client',
-                    'choice_label' => 'nom'))
-                ->add('activite', EntityType::class, array(
-                    'class' => 'AppBundle:Activite',
-                    'choice_label' => 'nom'))
-                ->add('duree', NumberType::class, array(
+                'format' => 'd/M/y'))
+            ->add('client', EntityType::class, array(
+                'class' => 'AppBundle:Client',
+                'choice_label' => 'nom'))
+            ->add('activite', EntityType::class, array(
+                'class' => 'AppBundle:Activite',
+                'choice_label' => 'nom'))
+            ->add('duree', NumberType::class, array(
                 'invalid_message' => 'La duree doit être un chiffre'))
-                ->add('description', TextareaType::class)
+            ->add('description', TextareaType::class)
+            ->add('user', EntityType::class, array(
+                'class' => 'AppBundle:User',
+                'choice_label' => 'username',
+                'disabled' => 'true'))
+            ->add('dateCreation', DateType::class, array(
+                'widget' => 'single_text',
+                'format' => 'd/M/y h:m:s',
+                'disabled' => 'true'))
             ->getForm();
 
         $deleteForm = $this->createFormBuilder()

@@ -21,7 +21,11 @@ class DefaultController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
                 // La méthode findAll retourne les taches de la base de données
-                $listTaches = $em->getRepository('AppBundle:Tache')->findAll();
+                if ($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
+                    $listTaches = $em->getRepository('AppBundle:Tache')->findAll();
+                } else {
+                    $listTaches = $em->getRepository('AppBundle:Tache')->findByUser($this->getUser());
+                }
                 return $this->render('tache/liste.html.twig',array(
         'listeTaches' => $listTaches
         ));
