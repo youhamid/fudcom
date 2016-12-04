@@ -1,9 +1,11 @@
-fudcom
+fidecom
 ======
 
 A Symfony project created on October 9, 2016, 9:33 am.
 
 Commandes installation :
+insttaion php apache mysql ( xampp)
+activation driver pdo_pgsql (extension=php_pdo_pgsql.dll)
 php bin/console doctrine:database:create
 php bin/console doctrine:schema:update --dump-sql
 php bin/console doctrine:schema:update --force
