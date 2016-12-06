@@ -12,6 +12,7 @@
         <thead>
             <tr>
                 <th><i class="fa fa-cogs"></i> Client</th>
+                <th><i class="fa fa-cogs"></i> Affectation </th>
                 <th><i class="fa fa-cogs"></i> Actions</th>
             </tr>
         </thead>
@@ -19,6 +20,7 @@
         {% for client in listeClients %}
             <tr>
                 <td>{{ client.nom }}</td>
+                <td>{{ client.user.username|default('') }}</td>
                 <td>
                     <div class="item-actions">
                             <a href="{{ path('modifier_client', { id: client.id }) }}" class="btn btn-sm btn-primary">

@@ -11,6 +11,7 @@ use AppBundle\Entity\Client;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 class ClientController extends Controller
 {
@@ -39,6 +40,10 @@ class ClientController extends Controller
 
     $form = $this->createFormBuilder($client)
             ->add('nom', TextType::class)
+            ->add('user', EntityType::class, array(
+                    'class' => 'AppBundle:User',
+                    'choice_label' => 'username',
+                    'label' => 'Affectation'))
             ->add('save', SubmitType::class, array('label' => 'Enregitrer client'))
             ->getForm();
 
@@ -76,6 +81,9 @@ class ClientController extends Controller
             ->add('nom', TextType::class,  [
                 'attr' => ['autofocus' => true]
             ])
+            ->add('user', EntityType::class, array(
+                    'class' => 'AppBundle:User',
+                    'choice_label' => 'username'))
             ->getForm();
 
         $deleteForm = $this->createFormBuilder()

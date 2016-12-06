@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use AppBundle\Entity\Tache;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -54,7 +55,10 @@ class TacheController extends Controller
                 ->add('activite', EntityType::class, array(
                     'class' => 'AppBundle:Activite',
                     'choice_label' => 'nom'))
-                ->add('duree', NumberType::class, array(
+                ->add('duree', ChoiceType::class, array(
+                    'choices'  => array(
+                        "1" => 1,"2" => 2,"3" => 3,"4" => 4,"5" => 5,"6" => 6,"7" => 7,"8" => 8,
+                     ),
                     'invalid_message' => 'La duree doit être un chiffre'))
                 ->add('description', TextareaType::class)
                 ->add('user', EntityType::class, array(
@@ -108,8 +112,10 @@ class TacheController extends Controller
             ->add('activite', EntityType::class, array(
                 'class' => 'AppBundle:Activite',
                 'choice_label' => 'nom'))
-            ->add('duree', NumberType::class, array(
-                'invalid_message' => 'La duree doit être un chiffre'))
+            ->add('duree', ChoiceType::class, array(
+                    'choices'  => array(
+                    '1' => 1,'2' => 2,'3' => 3,'4' => 4, '5' => 5,'6' => 6,'7' => 7,'8' => 8 ),
+                    'invalid_message' => 'La duree doit être un chiffre'))
             ->add('description', TextareaType::class)
             ->add('user', EntityType::class, array(
                 'class' => 'AppBundle:User',
