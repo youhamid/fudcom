@@ -16,5 +16,5 @@ php bin/console cache:clear
 php bin/console cache:clear --env=prod
 heroku config:set SYMFONY_ENV=prod
 php bin/console doctrine:generate:entities AppBundle
-php bin/console doctrine:generate:entities AppBundle/Entity/Tache
+php bin/console doctrine:generate:entities AppBundle/Entity/Client
 git remote add heroku https://git.heroku.com/fidecom.git

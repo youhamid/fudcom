@@ -30,11 +30,13 @@
                 <td>{{ tache.duree }}</td>
                 <td>{{ tache.description }}</td>
                 <td>
+                     {% if is_granted('ROLE_ADMIN') %}
                     <div class="item-actions">
                             <a href="{{ path('modifier_tache', { id: tache.id }) }}" class="btn btn-sm btn-primary">
                                 <i class="fa fa-edit"></i> Modifier
                             </a>
                     </div>
+                    {% endif %}
                 </td>
             </tr>
         {% else %}
