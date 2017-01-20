@@ -29,9 +29,9 @@ class Tache
     private $jour;
 
     /**
-     * @var string
+     * @var decimal
      *
-     * @ORM\Column(name="duree", type="decimal", precision=3, scale=1)
+     * @ORM\Column(name="duree", type="decimal", precision=4, scale=2)
      */
     private $duree;
 
@@ -120,7 +120,7 @@ class Tache
     /**
      * Get duree
      *
-     * @return string
+     * @return decimal
      */
     public function getDuree()
     {

@@ -57,8 +57,7 @@ class TacheController extends Controller
                     'choice_label' => 'nom'))
                 ->add('duree', ChoiceType::class, array(
                     'choices'  => array(
-                        "1" => 1,"2" => 2,"3" => 3,"4" => 4,"5" => 5,"6" => 6,"7" => 7,"8" => 8,
-                     ),
+                    '0.25' => '0.25','0.5' => '0.5','1' => '1.0','2' => '2.0','3' => '3.0','4' => '4.0', '5' => '5.0','6' => '6.0','7' => '7.0','8' => '8.0', '9' => '9.0'),
                     'invalid_message' => 'La duree doit être un chiffre'))
                 ->add('description', TextareaType::class)
                 ->add('user', EntityType::class, array(
@@ -114,7 +113,7 @@ class TacheController extends Controller
                 'choice_label' => 'nom'))
             ->add('duree', ChoiceType::class, array(
                     'choices'  => array(
-                    '1' => 1,'2' => 2,'3' => 3,'4' => 4, '5' => 5,'6' => 6,'7' => 7,'8' => 8 ),
+                    '0.25' => '0.25','0.5' => '0.5','1' => '1.0','2' => '2.0','3' => '3.0','4' => '4.0', '5' => '5.0','6' => '6.0','7' => '7.0','8' => '8.0', '9' => '9.0'),
                     'invalid_message' => 'La duree doit être un chiffre'))
             ->add('description', TextareaType::class)
             ->add('user', EntityType::class, array(
