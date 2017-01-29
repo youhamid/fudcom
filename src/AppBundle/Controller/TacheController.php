@@ -48,7 +48,7 @@ class TacheController extends Controller
         $form = $this->createFormBuilder($tache)
                 ->add('jour', DateType::class, array(
                 'widget' => 'single_text',
-                'format' => 'd/M/y'))
+                'format' => 'dd/MM/yyyy'))
                  ->add('client', EntityType::class, array(
                     'class' => 'AppBundle:Client',
                     'choice_label' => 'nom'))
@@ -104,7 +104,7 @@ class TacheController extends Controller
         $editForm = $this->createFormBuilder($tache)
             ->add('jour', DateType::class, array(
                 'widget' => 'single_text',
-                'format' => 'd/M/y'))
+                'format' => 'dd/MM/yyyy'))
             ->add('client', EntityType::class, array(
                 'class' => 'AppBundle:Client',
                 'choice_label' => 'nom'))
@@ -171,6 +171,131 @@ class TacheController extends Controller
         return $this->redirectToRoute('taches');
     }
 
+     /**
+     * @Route("/chercher_taches", name="chercher_taches")
+     */
+    
+    public function rechercherTachesAction(Request $request)
+    {
+
+        $form = $this->createFormBuilder()
+                ->add('annee', ChoiceType::class, array(
+                    'choices'  => array(
+                     Date('Y') => Date('Y'),  Date('Y') + 1 => Date('Y')+1)))
+                 ->add('mois', ChoiceType::class, array(
+                    'choices'  => array(
+                     '01'=>'01','02'=>'02','03'=>'03','04'=>'04','05'=>'05','06'=>'06','07'=>'07','08'=>'08','09'=>'09','10'=>'10','11'=>'11','12'=>'12')))
+                 ->add('client', EntityType::class, array(
+                    'class' => 'AppBundle:Client',
+                    'choice_label' => 'nom',
+                    'placeholder' => '...ALL...',
+                    'empty_data'  => null,
+                    'required' => false))
+                ->add('user', EntityType::class, array(
+                    'class' => 'AppBundle:User',
+                    'choice_label' => 'username',
+                    'placeholder' => '...ALL...',
+                    'empty_data'  => null,
+                    'required' => false))
+                ->add('Rechercher', SubmitType::class, array('label' => 'Rechercher'))
+                ->getForm();
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+             $entityManager = $this->getDoctrine()->getManager();
+             $queryBuilder = $entityManager->createQueryBuilder();
+             $dateDebut = \DateTime::createFromFormat('dmY', '01'.$form->get('mois')->getData().$form->get('annee')->getData()); 
+             $dateFin = \DateTime::createFromFormat('dmY', '30'.$form->get('mois')->getData().$form->get('annee')->getData());
+             $client = $form->get('client')->getData();
+             $user = $form->get('user')->getData();
+
+       if(!is_null($user) and !is_null($client)){
+                $queryBuilder = $queryBuilder
+               ->select('c.nom')
+               ->addselect('u.username')
+               ->addselect('SUM(t.duree) AS duree')
+               ->from('AppBundle:Tache', 't')
+               ->join('t.client', 'c')
+               ->join('t.user', 'u')
+               ->andwhere('t.client = :client')
+               ->andwhere('t.user = :user')
+               ->andwhere('t.jour >= :dateDebut')
+               ->andwhere('t.jour < :dateFin')
+               ->setParameter('dateDebut', $dateDebut)
+               ->setParameter('dateFin', $dateFin)
+               ->setParameter('user', $user)
+               ->setParameter('client', $client)
+               ->groupBy('c.nom')
+               ->addgroupBy('u.username');
+            };
+            
+            
+            if(!is_null($client) and is_null($user)){
+               $queryBuilder = $queryBuilder
+               ->select('c.nom')
+               ->addselect('u.username')
+               ->addselect('SUM(t.duree) AS duree')
+               ->from('AppBundle:Tache', 't')
+               ->join('t.client', 'c')
+               ->join('t.user', 'u')
+               ->andwhere('t.client = :client')
+               ->andwhere('t.jour >= :dateDebut')
+               ->andwhere('t.jour < :dateFin')
+               ->setParameter('dateDebut', $dateDebut)
+               ->setParameter('dateFin', $dateFin)
+               ->setParameter('client', $client)
+               ->groupBy('c.nom')
+               ->addgroupBy('u.username');
+            };
+
+            if(!is_null($user) and is_null($client)){
+                $queryBuilder = $queryBuilder
+               ->select('c.nom')
+               ->addselect('u.username')
+               ->addselect('SUM(t.duree) AS duree')
+               ->from('AppBundle:Tache', 't')
+               ->join('t.client', 'c')
+               ->join('t.user', 'u')
+               ->andwhere('t.user = :user')
+               ->andwhere('t.jour >= :dateDebut')
+               ->andwhere('t.jour < :dateFin')
+               ->setParameter('dateDebut', $dateDebut)
+               ->setParameter('dateFin', $dateFin)
+               ->setParameter('user', $user)
+               ->groupBy('c.nom')
+               ->addgroupBy('u.username');
+            };
+
+            if(is_null($client) and is_null($user)){
+               $queryBuilder = $queryBuilder
+               ->select('c.nom')
+               ->addselect('\'\' AS username')
+               ->addselect('SUM(t.duree) AS duree')
+               ->from('AppBundle:Tache', 't')
+               ->join('t.client', 'c')
+               ->join('t.user', 'u')
+               ->andwhere('t.jour >= :dateDebut')
+               ->andwhere('t.jour < :dateFin')
+               ->setParameter('dateDebut', $dateDebut)
+               ->setParameter('dateFin', $dateFin)
+               ->groupBy('c.nom')
+               ->orderby('duree', 'DESC');
+            };
+            $query = $queryBuilder->getQuery();
+            $listeTaches = $query->getResult();
+
+            return $this->render('tache/suivi.html.twig',array(
+                'listeTaches' => $listeTaches
+            ));
+    }
+
+    
+    return $this->render('tache/ajout.html.twig', array(
+      'form' => $form->createView(),
+    ));
+    }
 }
 
 

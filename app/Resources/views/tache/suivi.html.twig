@@ -1,0 +1,33 @@
+{# src/AppBundle/Resources/views/tache/index.html.twig #}
+
+{% extends "base.html.twig" %}
+
+{% block main %}
+<div class="item-actions navbar-right">
+    <a href="{{ path('ajouter_tache') }}" class="btn btn-sm btn-success">
+            <i class="fa fa-edit"></i> Ajouter une tache
+    </a>
+</div>
+<table class="table table-striped">
+        <thead>
+            <tr>
+                <th><i class="fa fa-cogs"></i> Client</th>
+                <th><i class="fa fa-cogs"></i> Utilisateur</th>
+                <th><i class="fa fa-cogs"></i> Durée</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for tache in listeTaches %}
+            <tr>
+                <td>{{ tache.nom}}</td>
+                <td>{{ tache.username}}</td>
+                <td>{{ tache.duree}}</td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4" align="center">Aucune Tache n'est trouvée</td>
+           </tr>
+        {% endfor %}
+        </tbody>
+</table>
+{% endblock %}

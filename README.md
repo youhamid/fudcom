@@ -18,6 +18,6 @@ heroku config:set SYMFONY_ENV=prod
 php bin/console doctrine:generate:entities AppBundle
 php bin/console doctrine:generate:entities AppBundle/Entity/Client
 git remote add heroku https://git.heroku.com/fidecom.git
-git commit -m " desciption"
+git commit -m "duree des taches  0.25 0.5"
 git push
 git push heroku 
