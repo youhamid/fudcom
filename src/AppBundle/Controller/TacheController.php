@@ -14,6 +14,8 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use \DateTime;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
 class TacheController extends Controller
 {
@@ -197,7 +199,10 @@ class TacheController extends Controller
                     'placeholder' => '...ALL...',
                     'empty_data'  => null,
                     'required' => false))
-                ->add('Rechercher', SubmitType::class, array('label' => 'Rechercher'))
+                ->add('excel', ChoiceType::class, array(
+                    'choices'  => array(
+                     'NON'=>false,'OUI'=>true,)))
+                ->add('OK', SubmitType::class, array('label' => 'OK'))
                 ->getForm();
 
         $form->handleRequest($request);
@@ -206,10 +211,73 @@ class TacheController extends Controller
 
              $entityManager = $this->getDoctrine()->getManager();
              $queryBuilder = $entityManager->createQueryBuilder();
-             $dateDebut = \DateTime::createFromFormat('dmY', '01'.$form->get('mois')->getData().$form->get('annee')->getData()); 
-             $dateFin = \DateTime::createFromFormat('dmY', '30'.$form->get('mois')->getData().$form->get('annee')->getData());
+             
+             $dateDebut = new DateTime();
+             $dateFin = new DateTime();
+             $dateDebut->setDate($form->get('annee')->getData(),$form->get('mois')->getData(),1);
+             $dateDebut->setDate($form->get('annee')->getData(),$form->get('mois')->getData(),1);
+             $dateFin->modify('+1 month');
+             
              $client = $form->get('client')->getData();
              $user = $form->get('user')->getData();
+             $excel = $form->get('excel')->getData();
+
+        if($excel) {
+               $queryBuilder = $queryBuilder
+               ->select('t')
+               ->from('AppBundle:Tache', 't')
+               ->andwhere('t.jour >= :dateDebut')
+               ->andwhere('t.jour < :dateFin')
+               ->setParameter('dateDebut', $dateDebut)
+               ->setParameter('dateFin', $dateFin);
+                $query = $queryBuilder->getQuery();
+                $listeTaches = $query->getResult();
+
+                $phpExcelObject = $this->get('phpexcel')->createPHPExcelObject();
+
+                $phpExcelObject->getProperties()->setCreator("FIDECOM");
+                $phpExcelObject->setActiveSheetIndex(0);
+
+                $phpExcelObject->getActiveSheet()
+                ->setCellValue('A1', 'Utilisateur')
+                ->setCellValue('B1', 'Jour')
+                ->setCellValue('C1', 'Client')
+                ->setCellValue('D1', 'Activite')
+                ->setCellValue('E1', 'Durée')
+                ->setCellValue('F1', 'Description');
+
+                $i=2;
+                foreach($listeTaches as $tache) {
+                     $phpExcelObject->getActiveSheet()
+                     ->setCellValue('A'.$i, $tache->getUser()->getUsername())
+                     ->setCellValue('B'.$i, $tache->getJour())
+                     ->setCellValue('C'.$i, $tache->getClient()->getNom())
+                     ->setCellValue('D'.$i, $tache->getActivite()->getNom())
+                     ->setCellValue('E'.$i, $tache->getDuree())
+                     ->setCellValue('F'.$i, $tache->getDescription());
+                     $i++;
+                }
+
+                $phpExcelObject->getActiveSheet()->setTitle('FIDECOM');
+                // Set active sheet index to the first sheet, so Excel opens this as the first sheet
+                $phpExcelObject->setActiveSheetIndex(0);
+
+                // create the writer
+                $writer = $this->get('phpexcel')->createWriter($phpExcelObject, 'Excel5');
+                // create the response
+                $response = $this->get('phpexcel')->createStreamedResponse($writer);
+                // adding headers
+                $dispositionHeader = $response->headers->makeDisposition(
+                ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+                'fidecom.xls'
+                );
+                $response->headers->set('Content-Type', 'text/vnd.ms-excel; charset=utf-8');
+                $response->headers->set('Pragma', 'public');
+                $response->headers->set('Cache-Control', 'maxage=1');
+                $response->headers->set('Content-Disposition', $dispositionHeader);
+
+                return $response;   
+           } 
 
        if(!is_null($user) and !is_null($client)){
                 $queryBuilder = $queryBuilder
@@ -287,15 +355,13 @@ class TacheController extends Controller
             $listeTaches = $query->getResult();
 
             return $this->render('tache/suivi.html.twig',array(
-                'listeTaches' => $listeTaches
+            'listeTaches' => $listeTaches
             ));
-    }
-
-    
+           };
     return $this->render('tache/ajout.html.twig', array(
       'form' => $form->createView(),
     ));
-    }
+}
 }
 
 
